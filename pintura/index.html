@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pinturas Christ-All – Rinde más y Dura más</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --blue:   #003087;
+  --blue-light: #1a4fa8;
+  --red:    #E8211A;
+  --yellow: #F5A623;
+  --green:  #2EAA3F;
+  --dark:   #0a0f1e;
+  --gray:   #f4f5f7;
+  --text:   #1a1a2e;
+  --muted:  #6b7280;
+  --white:  #ffffff;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.10);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.16);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+/* ─── NAVBAR ─────────────────────────────────── */
+#navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--white); border-bottom: 3px solid var(--blue);
+  padding: 0 5%; display: flex; align-items: center;
+  justify-content: space-between; height: 70px; transition: box-shadow .3s;
+}
+#navbar.scrolled { box-shadow: var(--shadow-lg); }
+.nav-logo img { height: 52px; object-fit: contain; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a { text-decoration: none; font-weight: 700; font-size: 15px; color: var(--text); letter-spacing: .5px; position: relative; padding-bottom: 4px; transition: color .2s; }
+.nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: var(--red); border-radius: 2px; transition: width .3s; }
+.nav-links a:hover { color: var(--red); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta { background: var(--red); color: var(--white) !important; padding: 9px 22px !important; border-radius: 6px; transition: background .2s, transform .2s !important; }
+.nav-cta:hover { background: #c0150f !important; transform: translateY(-1px); }
+.nav-cta::after { display: none !important; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+.hamburger span { width: 26px; height: 3px; background: var(--text); border-radius: 2px; transition: .3s; }
+
+/* ─── HERO ───────────────────────────────────── */
+#inicio { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; background: var(--dark); padding-top: 70px; }
+.hero-bg { position: absolute; inset: 0; background: repeating-linear-gradient(-45deg, rgba(0,48,135,.18) 0px, rgba(0,48,135,.18) 2px, transparent 2px, transparent 60px), linear-gradient(135deg, #0a1535 0%, #001a6e 40%, #0a0f1e 100%); }
+.hero-accent { position: absolute; right: -80px; top: 50%; transform: translateY(-50%); width: 620px; height: 620px; border-radius: 50%; background: radial-gradient(circle, rgba(232,33,26,.25) 0%, transparent 70%); pointer-events: none; }
+.hero-accent-2 { position: absolute; left: -100px; bottom: -100px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(245,166,35,.15) 0%, transparent 65%); pointer-events: none; }
+.paint-drips { position: absolute; top: 0; left: 0; right: 0; display: flex; gap: 0; height: 8px; }
+.drip { flex: 1; }
+.drip:nth-child(1){background:var(--blue);} .drip:nth-child(2){background:var(--red);}
+.drip:nth-child(3){background:var(--yellow);} .drip:nth-child(4){background:var(--green);}
+.drip:nth-child(5){background:var(--blue);} .drip:nth-child(6){background:var(--red);}
+.drip:nth-child(7){background:var(--yellow);} .drip:nth-child(8){background:var(--green);}
+.hero-content { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: 60px 5%; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 60px; }
+.hero-text { animation: fadeUp .8s ease forwards; }
+.hero-subtitle { font-size: clamp(18px, 2.5vw, 24px); color: rgba(255,255,255,.75); font-weight: 600; font-style: italic; margin-bottom: 40px; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--red); color: var(--white); padding: 16px 36px; border-radius: 8px; font-size: 16px; font-weight: 800; text-decoration: none; letter-spacing: .5px; transition: transform .2s, box-shadow .2s; box-shadow: 0 6px 24px rgba(232,33,26,.4); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(232,33,26,.5); }
+.btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--white); padding: 16px 36px; border-radius: 8px; border: 2px solid rgba(255,255,255,.35); font-size: 16px; font-weight: 700; text-decoration: none; transition: border-color .2s, background .2s; }
+.btn-secondary:hover { border-color: var(--white); background: rgba(255,255,255,.08); }
+.hero-stats { display: flex; gap: 32px; margin-top: 52px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.12); }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--yellow); line-height: 1; }
+.stat-label { font-size: 12px; color: rgba(255,255,255,.55); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+.hero-visual { display: flex; justify-content: center; animation: fadeUp .8s ease .2s both; }
+.paint-roller-card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 20px; padding: 40px; text-align: center; backdrop-filter: blur(8px); max-width: 340px; width: 100%; }
+.roller-icon { font-size: 90px; display: block; margin-bottom: 20px; filter: drop-shadow(0 8px 24px rgba(245,166,35,.3)); }
+.color-swatches { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }
+.swatch { width: 36px; height: 36px; border-radius: 50%; border: 3px solid rgba(255,255,255,.2); transition: transform .2s; cursor: pointer; }
+.swatch:hover { transform: scale(1.2); border-color: white; }
+
+/* ─── SECTION BASE ───────────────────────────── */
+section { padding: 90px 5%; }
+.section-label { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 58px); color: var(--text); letter-spacing: 1.5px; line-height: 1.05; margin-bottom: 16px; }
+.section-sub { font-size: 16px; color: var(--muted); max-width: 540px; line-height: 1.7; }
+
+/* ─── CATEGORY TABS ──────────────────────────── */
+.cat-tabs { display: flex; gap: 10px; align-items: center; }
+.cat-tab { display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; border-radius: 100px; border: 2px solid #e5e7eb; background: var(--white); color: var(--muted); font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all .2s; }
+.cat-tab:hover { border-color: var(--blue); color: var(--blue); }
+.cat-tab.active { background: var(--blue); border-color: var(--blue); color: var(--white); box-shadow: 0 4px 16px rgba(0,48,135,.25); }
+
+/* ─── PRODUCTS ───────────────────────────────── */
+#productos { background: var(--white); }
+.products-header { max-width: 1100px; margin: 0 auto 48px; display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+.products-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+.product-card { border-radius: var(--radius); background: var(--white); border: 1px solid #e5e7eb; overflow: hidden; cursor: pointer; opacity: 0; transform: translateY(24px); transition: opacity .5s, transform .5s, box-shadow .3s; }
+.product-card.visible { opacity: 1; transform: translateY(0); }
+.product-card:hover { transform: translateY(-8px) !important; box-shadow: var(--shadow-lg); }
+.product-card.hidden { display: none; }
+.product-img { height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.product-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.product-accent { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; }
+.product-body { padding: 20px; }
+.product-name { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
+.product-desc { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+.product-footer { display: flex; align-items: center; justify-content: space-between; }
+.product-price { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--blue); }
+.btn-card { display: inline-flex; align-items: center; gap: 6px; background: #25D366; color: white; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s, transform .2s; font-family: 'Nunito', sans-serif; text-decoration: none; }
+.btn-card:hover { background: #1ebe5d; transform: scale(1.04); }
+.btn-card svg { width: 15px; height: 15px; fill: white; flex-shrink: 0; }
+
+/* ─── MODAL COTIZADOR ────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 36px 32px;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: 0 24px 80px rgba(0,0,0,.3);
+  animation: modalIn .25s ease;
+  position: relative;
+}
+@keyframes modalIn { from { opacity:0; transform: translateY(20px) scale(.97); } to { opacity:1; transform: none; } }
+
+.modal-close {
+  position: absolute;
+  top: 16px; right: 18px;
+  background: none; border: none;
+  font-size: 22px; cursor: pointer;
+  color: var(--muted);
+  line-height: 1;
+  transition: color .2s;
+}
+.modal-close:hover { color: var(--red); }
+
+.modal-header { margin-bottom: 24px; }
+.modal-product-name { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--blue); margin-bottom: 2px; }
+.modal-product-sub { font-size: 13px; color: var(--muted); }
+
+.modal-label { font-weight: 800; font-size: 13px; margin-bottom: 10px; display: block; letter-spacing: .3px; }
+
+/* Tamaños */
+.size-options { display: flex; gap: 12px; margin-bottom: 24px; }
+.size-btn {
+  flex: 1;
+  padding: 14px 10px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  background: var(--white);
+  cursor: pointer;
+  text-align: center;
+  transition: all .2s;
+  font-family: 'Nunito', sans-serif;
+}
+.size-btn:hover { border-color: var(--blue); }
+.size-btn.selected { border-color: var(--blue); background: #EEF3FF; }
+.size-btn .size-icon { font-size: 26px; display: block; margin-bottom: 6px; }
+.size-btn .size-name { font-weight: 800; font-size: 14px; color: var(--text); display: block; }
+.size-btn .size-vol { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
+.size-btn .size-price { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--blue); display: block; margin-top: 4px; }
+.size-btn.selected .size-name,
+.size-btn.selected .size-price { color: var(--blue); }
+
+/* Cantidad */
+.qty-row { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.qty-btn { width: 38px; height: 38px; border-radius: 8px; border: 2px solid #e5e7eb; background: var(--white); font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; color: var(--text); }
+.qty-btn:hover { border-color: var(--blue); color: var(--blue); }
+.qty-num { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--text); min-width: 32px; text-align: center; }
+
+/* Total */
+.modal-total {
+  background: var(--gray);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.modal-total-label { font-weight: 700; font-size: 14px; color: var(--muted); }
+.modal-total-price { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: var(--blue); }
+
+/* WA Button */
+.btn-wa-modal {
+  width: 100%;
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background .2s, transform .2s;
+}
+.btn-wa-modal:hover { background: #1ebe5d; transform: translateY(-2px); }
+.btn-wa-modal svg { width: 20px; height: 20px; fill: white; }
+
+/* ─── SERVICES ───────────────────────────────── */
+#servicios { background: var(--dark); }
+#servicios .section-title { color: var(--white); }
+#servicios .section-sub { color: rgba(255,255,255,.55); }
+#servicios .section-label { color: var(--yellow); }
+.services-header { max-width: 1100px; margin: 0 auto 52px; }
+.services-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.service-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 36px 28px; opacity: 0; transform: translateY(24px); transition: opacity .5s, transform .5s, background .3s; }
+.service-card.visible { opacity: 1; transform: none; }
+.service-card:hover { background: rgba(255,255,255,.09); transform: translateY(-6px) !important; }
+.service-icon-wrap { width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 22px; }
+.service-name { font-weight: 800; font-size: 18px; color: white; margin-bottom: 10px; }
+.service-desc { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.65; margin-bottom: 20px; }
+.service-link { display: inline-flex; align-items: center; gap: 6px; color: var(--yellow); font-weight: 700; font-size: 13px; text-decoration: none; letter-spacing: .5px; cursor: pointer; }
+.service-link:hover { text-decoration: underline; }
+.service-link svg { width: 14px; height: 14px; fill: var(--yellow); flex-shrink: 0; }
+
+/* ─── ABOUT ──────────────────────────────────── */
+#nosotros { background: var(--gray); padding: 80px 20px; }
+.about-inner { max-width: 1000px; margin: 0 auto; }
+.about-text-img { display: flex; align-items: center; justify-content: center; gap: 50px; text-align: left; }
+.about-text { max-width: 550px; }
+.about-img img { width: 280px; height: 280px; object-fit: contain; }
+
+/* ─── CONTACT ────────────────────────────────── */
+#contacto { background: var(--gray); }
+.contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 72px; align-items: start; }
+.contact-info { margin-top: 40px; }
+.contact-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 28px; }
+.contact-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.contact-item-title { font-weight: 800; font-size: 14px; margin-bottom: 2px; }
+.contact-item-val { font-size: 15px; color: var(--muted); }
+.contact-form { background: var(--white); border-radius: 20px; padding: 48px 40px; box-shadow: var(--shadow); }
+.form-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; margin-bottom: 8px; }
+.form-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 700; font-size: 13px; margin-bottom: 7px; letter-spacing: .3px; }
+input, textarea { width: 100%; padding: 13px 16px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 15px; font-family: 'Nunito', sans-serif; color: var(--text); background: white; outline: none; transition: border-color .2s, box-shadow .2s; }
+input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,48,135,.08); }
+textarea { resize: vertical; min-height: 120px; }
+.btn-submit { width: 100%; background: var(--red); color: white; border: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: 800; cursor: pointer; letter-spacing: .5px; font-family: 'Nunito', sans-serif; transition: background .2s, transform .2s; }
+.btn-submit:hover { background: #c0150f; transform: translateY(-2px); }
+
+/* ─── FOOTER ─────────────────────────────────── */
+footer { background: var(--dark); padding: 56px 5% 32px; }
+.footer-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px; padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.footer-logo img { height: 130px; margin-bottom: 16px; }
+.footer-tagline { font-size: 15px; color: rgba(255,255,255,.45); font-style: italic; margin-bottom: 20px; }
+.footer-social { display: flex; gap: 10px; }
+.social-btn { width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; font-size: 16px; color: white; text-decoration: none; transition: background .2s; }
+.social-btn:hover { background: var(--blue); }
+.footer-col-title { font-weight: 800; font-size: 13px; color: white; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a { color: rgba(255,255,255,.45); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+.footer-links a:hover { color: var(--yellow); }
+.footer-bottom { max-width: 1100px; margin: 0 auto; padding-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-copy { font-size: 13px; color: rgba(255,255,255,.3); }
+.color-bar { display: flex; height: 5px; }
+.color-bar span { flex: 1; }
+.color-bar span:nth-child(1){background:var(--blue);} .color-bar span:nth-child(2){background:var(--red);}
+.color-bar span:nth-child(3){background:var(--yellow);} .color-bar span:nth-child(4){background:var(--green);}
+
+/* ─── WHATSAPP FLOAT ─────────────────────────── */
+.whatsapp-float { position: fixed; bottom: 28px; right: 28px; z-index: 999; width: 58px; height: 58px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 24px rgba(37,211,102,.45); text-decoration: none; font-size: 28px; animation: pulse 2.5s infinite; transition: transform .2s; }
+.whatsapp-float:hover { transform: scale(1.1); }
+
+/* ─── ANIMATIONS ─────────────────────────────── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { box-shadow: 0 6px 24px rgba(37,211,102,.45); } 50% { box-shadow: 0 6px 40px rgba(37,211,102,.7); } }
+
+/* ─── RESPONSIVE ─────────────────────────────── */
+@media(max-width: 900px) {
+  .hero-content { grid-template-columns: 1fr; text-align: center; }
+  .hero-visual { display: none; }
+  .hero-actions { justify-content: center; }
+  .hero-stats { justify-content: center; }
+  .services-grid { grid-template-columns: 1fr; }
+  .contact-inner { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; right: 0; background: white; padding: 24px; border-bottom: 2px solid var(--blue); gap: 16px; }
+  .nav-links.open { display: flex; }
+  .hamburger { display: flex; }
+  .products-header { flex-direction: column; align-items: flex-start; }
+}
+@media(max-width: 600px) {
+  section { padding: 60px 5%; }
+  .form-row { grid-template-columns: 1fr; }
+  .contact-form { padding: 28px 20px; }
+  .cat-tabs { flex-wrap: wrap; }
+  .modal-box { padding: 28px 20px; }
+  .size-options { gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     MODAL COTIZADOR
+════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="cerrarModalSiOverlay(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="cerrarModal()">✕</button>
+
+    <div class="modal-header">
+      <div class="modal-product-name" id="modalNombre">Acrilica</div>
+      <div class="modal-product-sub">Selecciona el tamaño y la cantidad</div>
+    </div>
+
+    <!-- TAMAÑOS -->
+    <span class="modal-label">Presentación</span>
+    <div class="size-options" id="sizeOptions">
+      <div class="size-btn selected" onclick="seleccionarTamano(this, 'Galón', '1 galón', 1)" data-mult="1">
+        <span class="size-icon">🪣</span>
+        <span class="size-name">Galón</span>
+        <span class="size-vol">1 galón</span>
+        <span class="size-price" id="priceSingle">RD$0</span>
+      </div>
+      <div class="size-btn" onclick="seleccionarTamano(this, 'Tarro', '5 galones', 5)" data-mult="5">
+        <span class="size-icon">🛢️</span>
+        <span class="size-name">Tarro</span>
+        <span class="size-vol">5 galones</span>
+        <span class="size-price" id="priceTarro">RD$0</span>
+      </div>
+    </div>
+
+    <!-- CANTIDAD -->
+    <span class="modal-label">Cantidad</span>
+    <div class="qty-row">
+      <button class="qty-btn" onclick="cambiarCantidad(-1)">−</button>
+      <span class="qty-num" id="qtyNum">1</span>
+      <button class="qty-btn" onclick="cambiarCantidad(1)">+</button>
+      <span style="font-size:13px;color:var(--muted);margin-left:4px;" id="qtyLabel">unidad</span>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="modal-total">
+      <span class="modal-total-label">Total estimado</span>
+      <span class="modal-total-price" id="modalTotal">RD$0</span>
+    </div>
+
+    <!-- BOTÓN WA -->
+    <button class="btn-wa-modal" onclick="enviarCotizacion()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar cotización por WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a class="nav-logo" href="#inicio"><img src="ChatGPT Image Mar 25, 2026, 11_32_45 PM.png" alt="Pinturas Christ-All"/></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#inicio">Inicio</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#contacto" class="nav-cta">Contáctanos</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menú"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HERO -->
+<section id="inicio">
+  <div class="paint-drips"><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div></div>
+  <div class="hero-bg"></div><div class="hero-accent"></div><div class="hero-accent-2"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <img src="ChatGPT Image Mar 25, 2026, 11_32_45 PM.png" alt="no se ve" width="500px" height="400px">
+      <p class="hero-subtitle">"Rinde más y Dura más"</p>
+      <div class="hero-actions">
+        <a href="#productos" class="btn-primary">🎨 Ver Productos</a>
+        <a href="#contacto" class="btn-secondary">📞 Contáctanos</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num">10+</div><div class="stat-label">Años de experiencia</div></div>
+        <div><div class="stat-num">500+</div><div class="stat-label">Colores disponibles</div></div>
+        <div><div class="stat-num">100%</div><div class="stat-label">Hecho en RD</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="paint-roller-card">
+        <span class="roller-icon">🖌️</span>
+        <p style="color:rgba(255,255,255,.7);font-size:14px;font-weight:600;line-height:1.6;">Calidad profesional para tu hogar, negocio o edificio. Colores vibrantes que resisten el clima caribeño.</p>
+        <div class="color-swatches">
+          <div class="swatch" style="background:#003087"></div><div class="swatch" style="background:#E8211A"></div>
+          <div class="swatch" style="background:#F5A623"></div><div class="swatch" style="background:#2EAA3F"></div>
+          <div class="swatch" style="background:#ffffff"></div><div class="swatch" style="background:#1a1a2e"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="productos">
+  <div class="products-header">
+    <div>
+      <span class="section-label">Nuestros Productos</span>
+      <h2 class="section-title">Pinturas para cada proyecto</h2>
+    </div>
+    <div class="cat-tabs">
+      <button class="cat-tab active" onclick="filtrarCategoria('pinturas', this)">🎨 Pinturas</button>
+      <button class="cat-tab" onclick="filtrarCategoria('accesorios', this)">🖌️ Accesorios</button>
+    </div>
+  </div>
+
+  <div class="products-grid">
+
+    <!-- ════ PINTURAS ════ -->
+    <div class="product-card" data-cat="pinturas">
+      <div class="product-img" style="background:#EEF3FF;"><img src="ac.png" alt="Acrilica"/><div class="product-accent" style="background:var(--blue)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Acrilica</div>
+        <div class="product-desc">Acabado mate de buena cobertura y rendimiento, ideal para uso interior en salas y habitaciones.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$750</div>
+          <button class="btn-card" onclick="abrirModal('Acrilica', 750)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="pinturas">
+      <div class="product-img" style="background:#EEF3FF;"><img src="acs.png" alt="Acrilica Superior"/><div class="product-accent" style="background:var(--blue)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Acrilica Superior</div>
+        <div class="product-desc">Acabado mate suave, lavable y de mayor durabilidad. Ideal para salas, habitaciones y áreas familiares.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$850</div>
+          <button class="btn-card" onclick="abrirModal('Acrilica Superior', 850)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="pinturas">
+      <div class="product-img" style="background:#FFF3F3;"><img src="sg.png" alt="Semigloss"/><div class="product-accent" style="background:var(--red)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Semigloss</div>
+        <div class="product-desc">Acabado semi brillante con mayor brillo y resistencia, fácil de limpiar e ideal para cocinas, baños y puertas.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$1,100</div>
+          <button class="btn-card" onclick="abrirModal('Semigloss', 1100)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="pinturas">
+      <div class="product-img" style="background:#FFF3F3;"><img src="st-removebg-preview.png" alt="Satinada"/><div class="product-accent" style="background:var(--red)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Satinada</div>
+        <div class="product-desc">Ofrece máxima protección contra lluvia, sol y humedad, ideal para fachadas y superficies exteriores.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$1,100</div>
+          <button class="btn-card" onclick="abrirModal('Satinada', 1100)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="pinturas">
+      <div class="product-img" style="background:#FFFBEE;"><img src="es.png" alt="Esmalte"/><div class="product-accent" style="background:var(--yellow)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Esmalte</div>
+        <div class="product-desc">Acabado brillante de larga duración que protege maderas, metales y rejas contra el desgaste y la intemperie.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$1,350</div>
+          <button class="btn-card" onclick="abrirModal('Esmalte', 1350)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="pinturas">
+      <div class="product-img" style="background:#F0FFF4;"><img src="pri.png" alt="Primer"/><div class="product-accent" style="background:var(--green)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Primer</div>
+        <div class="product-desc">Ideal para interiores y espacios cerrados. Sella la superficie, mejora la adherencia y garantiza un acabado uniforme.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$700</div>
+          <button class="btn-card" onclick="abrirModal('Primer', 700)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card" data-cat="pinturas">
+      <div class="product-img" style="background:#EEF3FF;"><img src="se.png" alt="Sellador"/><div class="product-accent" style="background:var(--blue)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Sellador</div>
+        <div class="product-desc">Preparación profesional para sellado de techos en superficies nuevas o repintadas, garantizando una adhesión superior.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$1,100</div>
+          <button class="btn-card" onclick="abrirModal('Sellador', 1100)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ ACCESORIOS ════ -->
+    <div class="product-card hidden" data-cat="accesorios">
+      <div class="product-img" style="background:#EEF3FF;"><img src="motaa.png" alt="Mota"/><div class="product-accent" style="background:var(--blue)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Mota de Pintura</div>
+        <div class="product-desc">Mota de esponja de alta densidad, ideal para aplicar pintura en superficies irregulares y esquinas.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$125</div>
+          <button class="btn-card" onclick="abrirModal('Mota de Pintura', 120, true)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card hidden" data-cat="accesorios">
+      <div class="product-img" style="background:#F0FFF4;"><img src="rolo.png" alt="Rolo"/><div class="product-accent" style="background:var(--green)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Rolo de Pintura</div>
+        <div class="product-desc">Rolo profesional de pelo corto para superficies lisas. Cobertura uniforme y sin marcas.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$125</div>
+          <button class="btn-card" onclick="abrirModal('Rolo de Pintura', 180, true)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card hidden" data-cat="accesorios">
+      <div class="product-img" style="background:#FFFBEE;"><img src="1m.png" alt="Brocha 1 1/2"/><div class="product-accent" style="background:var(--yellow)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Brocha 1 1/2 IN</div>
+        <div class="product-desc">Diseño para detalles, esquinas y zonas de difícil acceso. Ideal para trabajos de precisión.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$35</div>
+          <button class="btn-card" onclick="abrirModal('Brocha 1 1/2 IN', 95, true)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card hidden" data-cat="accesorios">
+      <div class="product-img" style="background:#FFF3F3;"><img src="2.png" alt="Brocha 2"/><div class="product-accent" style="background:var(--red)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Brocha 2 IN</div>
+        <div class="product-desc">Brocha de cerdas suaves para cortes, marcos y bordes. Acabado limpio y preciso.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$50</div>
+          <button class="btn-card" onclick="abrirModal('Brocha 2 IN', 110, true)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card hidden" data-cat="accesorios">
+      <div class="product-img" style="background:#FFF3F3;"><img src="2m.png" alt="Brocha 2 1/2"/><div class="product-accent" style="background:var(--red)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Brocha 2 1/2 IN</div>
+        <div class="product-desc">Brocha de cerdas suaves para cortes, marcos y bordes. Acabado limpio y preciso.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$75</div>
+          <button class="btn-card" onclick="abrirModal('Brocha 2 1/2 IN', 110, true)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card hidden" data-cat="accesorios">
+      <div class="product-img" style="background:#FFF3F3;"><img src="3.png" alt="Brocha 3"/><div class="product-accent" style="background:var(--red)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Brocha 3 IN</div>
+        <div class="product-desc">Brocha de cerdas suaves para cortes, marcos y bordes. Acabado limpio y preciso.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$100</div>
+          <button class="btn-card" onclick="abrirModal('Brocha 3 IN', 110, true)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card hidden" data-cat="accesorios">
+      <div class="product-img" style="background:#FFF3F3;"><img src="4.png" alt="Brocha 4"/><div class="product-accent" style="background:var(--red)"></div></div>
+      <div class="product-body">
+        <div class="product-name">Brocha 4 IN</div>
+        <div class="product-desc">Brocha de cerdas suaves para cortes, marcos y bordes. Acabado limpio y preciso.</div>
+        <div class="product-footer">
+          <div class="product-price">RD$125</div>
+          <button class="btn-card" onclick="abrirModal('Brocha 4 IN', 110, true)">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Cotizar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios">
+  <div class="services-header">
+    <span class="section-label">Lo que ofrecemos</span>
+    <h2 class="section-title">Nuestros Servicios</h2>
+    <p class="section-sub">Desde asesoría de color hasta proyectos completos de pintura. Contamos con expertos que te acompañan en cada paso.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon-wrap" style="background:rgba(0,48,135,.25);">🏠</div>
+      <div class="service-name">Pintura Residencial</div>
+      <div class="service-desc">Transformamos tu hogar con colores que reflejan tu personalidad. Interiores y exteriores con acabado profesional.</div>
+      <a href="#" class="service-link" onclick="cotizarServicio('Servicio de Pintura Residencial'); return false;">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Solicitar cotización →
+      </a>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap" style="background:rgba(232,33,26,.2);">🏢</div>
+      <div class="service-name">Pintura Comercial</div>
+      <div class="service-desc">Para oficinas, negocios y edificios. Ejecutamos proyectos grandes con precisión, rapidez y calidad garantizada.</div>
+      <a href="#" class="service-link" onclick="cotizarServicio('Servicio de Pintura Comercial'); return false;">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Solicitar cotización →
+      </a>
+    </div>
+    <div class="service-card">
+      <div class="service-icon-wrap" style="background:rgba(245,166,35,.2);">🎨</div>
+      <div class="service-name">Asesoría de Color</div>
+      <div class="service-desc">Nuestros especialistas te ayudan a elegir la paleta perfecta para cada espacio. Servicio gratis con tu compra.</div>
+      <a href="#" class="service-link" onclick="cotizarServicio('Asesoría de Color'); return false;">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Agendar consulta →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="nosotros">
+  <div class="about-inner">
+    <div class="about-text-img centered">
+      <div class="about-text">
+        <span class="section-label">Sobre Nosotros</span>
+        <h2 class="section-title">Calidad dominicana,<br/>Resultado Nacional</h2>
+        <p class="section-sub">Pinturas Christ-All es una empresa familiar dominicana fundada en 2012 por una pareja de Santiago de los Caballeros, quienes han construido su vida juntos con esfuerzo, valores y dedicación. Él, con una fuerte ética de trabajo, no solo se ha enfocado en su familia, sino que también ha sido guía para muchos de sus sobrinos, mientras que ella, siempre presente, ha sido un apoyo constante tanto en el hogar como en el crecimiento del negocio. Su casa ha sido un lugar donde muchos han crecido con disciplina, respeto y oportunidades, y hoy todo eso se refleja en Pinturas Christ-All: una marca hecha con compromiso, calidad y orgullo dominicano.</p>
+      </div>
+      <div class="about-img"><img src="file_0000000012a871f88d81fdea4737c7f5.png" alt="logo"/></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto">
+  <div class="contact-inner">
+    <div>
+      <span class="section-label">Hablemos</span>
+      <h2 class="section-title">¿Listo para<br/>transformar tus espacios?</h2>
+      <p class="section-sub">Contáctanos y recibe atención personalizada. Te respondemos en menos de 24 horas.</p>
+      <div class="contact-info">
+        <div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-item-title">Ubicación</div><div class="contact-item-val">Santiago de los Caballeros, República Dominicana</div></div></div>
+        <div class="contact-item"><div class="contact-icon">📞</div><div><div class="contact-item-title">Teléfono</div><div class="contact-item-val">+1 (809) 847-4208</div></div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div><div class="contact-item-title">Email</div><div class="contact-item-val">christall13.ch@gmail.com</div></div></div>
+        <div class="contact-item"><div class="contact-icon">🕐</div><div><div class="contact-item-title">Horario</div><div class="contact-item-val">Lun–Vie: 8am–6pm · Sáb: 8am–1pm</div></div></div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-title">Envíanos un mensaje</div>
+      <p class="form-sub">Cuéntanos sobre tu proyecto y te daremos una cotización gratis.</p>
+      <div class="form-row">
+        <div class="form-group"><label>Nombre completo</label><input type="text" placeholder="Tu nombre"/></div>
+        <div class="form-group"><label>Teléfono</label><input type="tel" placeholder="809-000-0000"/></div>
+      </div>
+      <div class="form-group"><label>Correo electrónico</label><input type="email" placeholder="tucorreo@ejemplo.com"/></div>
+      <div class="form-group">
+        <label>Tipo de proyecto</label>
+        <select style="width:100%;padding:13px 16px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:15px;font-family:'Nunito',sans-serif;color:var(--text);outline:none;background:white;">
+          <option>Pintura residencial – interior</option><option>Pintura residencial – exterior</option>
+          <option>Pintura comercial / edificio</option><option>Asesoría de color</option><option>Otro</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Mensaje</label><textarea placeholder="Cuéntanos más sobre tu proyecto…"></textarea></div>
+      <button class="btn-submit" onclick="handleSubmit()">🚀 Enviar mensaje</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="color-bar"><span></span><span></span><span></span><span></span></div>
+  <div style="height:40px"></div>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo"><img src="ChatGPT Image Mar 25, 2026, 11_32_45 PM.png" alt="Pinturas Christ-All"/></div>
+      <p class="footer-tagline">"Rinde más y Dura más"</p>
+      <div class="footer-social">
+        <a class="social-btn" href="#">📘</a><a class="social-btn" href="#">📸</a>
+        <a class="social-btn" href="#">▶️</a><a class="social-btn" href="#">💬</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navegación</div>
+      <ul class="footer-links">
+        <li><a href="#inicio">Inicio</a></li><li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#productos">Productos</a></li><li><a href="#servicios">Servicios</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Productos</div>
+      <ul class="footer-links">
+        <li><a href="#">Acrilica</a></li><li><a href="#">Semigloss</a></li>
+        <li><a href="#">Esmalte</a></li><li><a href="#">Sellador</a></li>
+        <li><a href="#">Ver catálogo completo</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Pinturas Christ-All. Todos los derechos reservados. 🇩🇴</span>
+    <span class="footer-copy">Diseñado con orgullo dominicano</span>
+  </div>
+</footer>
+
+<a class="whatsapp-float" href="https://wa.me/18098474208" target="_blank" title="Contáctanos por WhatsApp">💬</a>
+
+<script>
+const WA_NUMBER = '18098474208';
+
+// ─── ESTADO DEL MODAL ─────────────────────────
+let modalProducto = '';
+let modalPrecioBase = 0;
+let modalEsAccesorio = false;
+let modalMultiplicador = 1; // 1 = galón, 5 = tarro
+let modalCantidad = 1;
+
+// ─── ABRIR MODAL ──────────────────────────────
+function abrirModal(nombre, precioGalon, esAccesorio = false) {
+  modalProducto = nombre;
+  modalPrecioBase = precioGalon;
+  modalEsAccesorio = esAccesorio;
+  modalMultiplicador = 1;
+  modalCantidad = 1;
+
+  document.getElementById('modalNombre').textContent = nombre;
+  document.getElementById('qtyNum').textContent = 1;
+
+  // Si es accesorio, ocultar selector de tamaño y mostrar solo cantidad
+  const sizeOptions = document.getElementById('sizeOptions');
+  const sizeLabel = sizeOptions.previousElementSibling;
+
+  if (esAccesorio) {
+    sizeOptions.style.display = 'none';
+    sizeLabel.style.display = 'none';
+    document.querySelector('.size-btn.selected')?.classList.remove('selected');
+  } else {
+    sizeOptions.style.display = 'flex';
+    sizeLabel.style.display = 'block';
+    // Resetear a galón seleccionado
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.size-btn')[0].classList.add('selected');
+    document.getElementById('priceSingle').textContent = 'RD$' + precioGalon.toLocaleString();
+    document.getElementById('priceTarro').textContent = 'RD$' + (precioGalon * 5).toLocaleString();
+  }
+
+  document.getElementById('qtyLabel').textContent = esAccesorio ? 'unidad(es)' : 'unidad(es)';
+  actualizarTotal();
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+// ─── CERRAR MODAL ─────────────────────────────
+function cerrarModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function cerrarModalSiOverlay(e) {
+  if (e.target === document.getElementById('modalOverlay')) cerrarModal();
+}
+
+// ─── SELECCIONAR TAMAÑO ───────────────────────
+function seleccionarTamano(btn, nombre, vol, mult) {
+  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  modalMultiplicador = mult;
+  document.getElementById('qtyLabel').textContent = nombre === 'Tarro' ? 'tarro(s) de 5 galones' : 'galón(es)';
+  actualizarTotal();
+}
+
+// ─── CAMBIAR CANTIDAD ─────────────────────────
+function cambiarCantidad(delta) {
+  modalCantidad = Math.max(1, modalCantidad + delta);
+  document.getElementById('qtyNum').textContent = modalCantidad;
+  actualizarTotal();
+}
+
+// ─── ACTUALIZAR TOTAL ─────────────────────────
+function actualizarTotal() {
+  const total = modalPrecioBase * modalMultiplicador * modalCantidad;
+  document.getElementById('modalTotal').textContent = 'RD$' + total.toLocaleString();
+}
+
+// ─── ENVIAR COTIZACIÓN POR WHATSAPP ───────────
+function enviarCotizacion() {
+  const total = modalPrecioBase * modalMultiplicador * modalCantidad;
+  let presentacion, galones;
+
+  if (modalEsAccesorio) {
+    presentacion = `${modalCantidad} unidad(es)`;
+    galones = '';
+  } else {
+    const tamano = modalMultiplicador === 5 ? 'Tarro (5 galones)' : 'Galón (1 galón)';
+    galones = modalMultiplicador * modalCantidad;
+    presentacion = `${modalCantidad} ${tamano === 'Tarro (5 galones)' ? 'tarro(s) de 5 galones' : 'galón(es)'}`;
+  }
+
+  const mensaje =
+    `¡Saludos! Quisiera cotizar el siguiente producto de Pinturas Christ-All:\n\n` +
+    `🎨 *Producto:* ${modalProducto}\n` +
+    `📦 *Presentación:* ${presentacion}\n` +
+    (galones ? `💧 *Total galones:* ${galones} galones\n` : '') +
+    `💰 *Total estimado:* RD$${total.toLocaleString()}\n\n` +
+    `¿Me pueden confirmar disponibilidad y colores? ¡Gracias!`;
+
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(mensaje)}`, '_blank');
+  cerrarModal();
+}
+
+// ─── SERVICIOS: envío directo a WA ────────────
+function cotizarServicio(nombre) {
+  const msg = `¡Saludos! Estoy interesado en el ${nombre} de Pinturas Christ-All.\n\n¿Me pueden dar más información y una cotización? ¡Gracias!`;
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ─── FILTRO CATEGORÍAS ────────────────────────
+function filtrarCategoria(cat, btnClicked) {
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+  btnClicked.classList.add('active');
+  document.querySelectorAll('.product-card').forEach(card => {
+    if (card.dataset.cat === cat) {
+      card.classList.remove('hidden');
+      card.classList.remove('visible');
+      setTimeout(() => card.classList.add('visible'), 50);
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+// ─── NAVBAR SCROLL ────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// ─── MOBILE MENU ──────────────────────────────
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
+
+// ─── ANIMATIONS ───────────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('visible'), i * 100);
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.product-card:not(.hidden), .service-card').forEach(el => observer.observe(el));
+
+// ─── FORM SUBMIT ──────────────────────────────
+function handleSubmit() {
+  const btn = document.querySelector('.btn-submit');
+  btn.textContent = '✅ ¡Mensaje enviado!';
+  btn.style.background = 'var(--green)';
+  setTimeout(() => { btn.textContent = '🚀 Enviar mensaje'; btn.style.background = 'var(--red)'; }, 3000);
+}
+
+// ─── CERRAR CON ESC ───────────────────────────
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+</script>
+</body>
+</html>
